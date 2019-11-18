@@ -1,16 +1,18 @@
-{% block content %}
+
 <html>
 
     <head>
-        Rate My Professor Version 2!
+       {% if title %}
+        <title>{{ title }} - Rate My Professor V2</title>
+        {% else %}
+        <title>Welcome to RMP V2</title>
+        {% endif %}
     </head>
 
-    <body>
-        <div>
-            Test
-        </div>
-    </body>
+
+
+
 
 
 </html>
-{% endblock %}
+{% block content %}{% endblock %}
