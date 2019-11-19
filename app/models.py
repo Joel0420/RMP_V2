@@ -27,7 +27,7 @@ class Professor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
-    average_rating = db.Column(db.float, index=True) #IS A FLOAT VALID HERE??!!
+    average_rating = db.Column(db.Float, index=True)
 
     def __repr__(self):
         return '<Professor {}>'.format(self.last_name)
@@ -44,10 +44,12 @@ class Course(db.Model):
 
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.relationship(db.Integer, primary_key=True)
-    professor_id = db.relationship(db.Integer, primary_key=True)
+    course_id = db.relationship(db.Integer)  # insert not null
+    professor_id = db.relationship(db.Integer)
     semester = db.Column(db.String(64), index=True)
     year = db.Column(db.String(64), index=True)
 
     def __repr__(self):
         return '<Professor {}>'.format(self.id)
+
+
