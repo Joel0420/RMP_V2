@@ -17,6 +17,7 @@ class User (UserMixin, db.Model):
         return '<User {}>'.format(self.username)
 
 
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -24,7 +25,8 @@ def load_user(id):
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    section_id = db.relationship('Section', backref='id', lazy='dynamic')
+    section_id = db.Column(db.Integer, db.ForeignKey("Section", "id"))
+    section = db.relationship('Section', backref='ratings', lazy='dynamic')
 
     def __repr__(self):
         return '<Rating {}>'.format(self.id)
@@ -51,8 +53,8 @@ class Course(db.Model):
 
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.relationship(db.Integer)  # insert not null
-    professor_id = db.relationship(db.Integer)
+    course_id = db.relationship(db.Integer, db.ForeignKey)  # insert not null
+    professor_id = db.relationship(db.Integer, db.ForeignKey)
     semester = db.Column(db.String(64), index=True)
     year = db.Column(db.String(64), index=True)
 

@@ -1,4 +1,4 @@
-from flask import render_template, flash
+from flask import render_template, flash, redirect, url_for
 from flask_login import current_user, login_user
 from app import app, db
 from app.models import *
@@ -10,6 +10,7 @@ from app.forms import *
 def index():
     user = {'username': "Joel, Iyayi, Cam"}
     return render_template('index.html', title='Home', user=user)
+
 
 @app.route('/about')
 def about_us():
@@ -34,13 +35,32 @@ def reset_db():
         db.session.execute(table.delete())
     db.session.commit()
 
-    c1 = Course(name="COMP 171", description="Intro To Computer Science learning Python through simple IDE's" )
+    c1 = Course(name="COMP 171", description="Intro To Computer Science learning Python through simple IDE's")
     db.session.add(c1)
     db.commit()
 
-    c1 = Course(name="COMP 172", description="Intro To Computer Science 2, Learning Java and Object Oriented Programming")
+    c1 = Course(name="COMP 172",
+                description="Intro To Computer Science 2, Learning Java and Object Oriented Programming")
     db.session.add(c1)
     db.commit()
+
+    p1 = Professor(first_name="Doug", last_name="Turnbull", average_rating=4)
+    db.session.add(p1)
+    db.commit()
+
+    p2 = Professor(first_name="Ali", last_name="Erkan", average_rating=4)
+    db.session.add(p2)
+    db.commit()
+
+    u1 = User(username="jay", first_name="Joel", last_name="Jerez", email="jrez@gmail.com")
+    db.session.add(u1)
+    db.commit()
+
+    u2 = User(username="cam_1", first_name="Cam", last_name="Reddish", email="cred@gmail.com")
+    db.session.add(u2)
+    db.commit()
+
+    return render_template('index.html', title='Home')
 
 
 @app.route('/login')
@@ -62,8 +82,3 @@ def register():
         flash("Congratulations you are now a registered user!")
         return redirect('/login')
     return render_template('register.html', title='register', form=form)
-
-
-
-
-
