@@ -27,6 +27,7 @@ def about_us():
 
 @app.route('/reset_db')
 def reset_db():
+
     flash("Resetting database: deleting old data and repopulating with dummy data")
     # clear all data from all tables
     meta = db.metadata
@@ -35,31 +36,123 @@ def reset_db():
         db.session.execute(table.delete())
     db.session.commit()
 
-    c1 = Course(name="COMP 171", description="Intro To Computer Science learning Python through simple IDE's")
-    db.session.add(c1)
-    db.commit()
+    users = [
+        {
+            'username': 'jay',
+            'first_name': 'Joel',
+            'last_name': 'Jerez',
+            'email': 'jrez@gmail.com',
+            'password_hash': 'TopSecret'
+        },
 
-    c1 = Course(name="COMP 172",
-                description="Intro To Computer Science 2, Learning Java and Object Oriented Programming")
-    db.session.add(c1)
-    db.commit()
+        {
+            'username': 'cam1',
+            'first_name': 'Cam',
+            'last_name': 'Reddish',
+            'email': 'cred@gmail.com',
+            'password_hash': 'NBAPlayer'
+        }
+    ]
 
-    p1 = Professor(first_name="Doug", last_name="Turnbull", average_rating=4)
-    db.session.add(p1)
-    db.commit()
+    ratings = [
+        {
+            'rating': '2',
+            'user_id': '1',
+            'professor_id': '1'
 
-    p2 = Professor(first_name="Ali", last_name="Erkan", average_rating=4)
-    db.session.add(p2)
-    db.commit()
+        },
 
-    u1 = User(username="jay", first_name="Joel", last_name="Jerez", email="jrez@gmail.com")
-    db.session.add(u1)
-    db.commit()
+        {
+            'rating': '5',
+            'user_id': '1',
+            'professor_id': '2'
+        },
 
-    u2 = User(username="cam_1", first_name="Cam", last_name="Reddish", email="cred@gmail.com")
-    db.session.add(u2)
-    db.commit()
+        {
+            'rating': '7',
+            'user_id': '2',
+            'professor_id': '1'
+        },
 
+        {
+            'rating': '5',
+            'user_id': '2',
+            'professor_id': '2'
+        }
+    ]
+
+    comments = [
+        {
+            'comment': 'Bro you are an amazing professor what',
+            'user_id':'1',
+            'professor_id':'1'
+        },
+        {
+            'comment': 'Bro you are a weird professor',
+            'user_id': '1',
+            'professor_id': '2'
+        },
+        {
+            'comment': 'I ate in the back of class all semester',
+            'user_id': '2',
+            'professor_id': '1'
+        },
+        {
+            'comment': 'Weird class',
+            'user_id': '2',
+            'professor_id': '2'
+        },
+    ]
+
+    professors = [
+        {
+            'first_name': 'Doug',
+            'last_name': 'Turnbull'
+        },
+        {
+            'first_name': 'Ali',
+            'last_name': 'Erkan'
+        }
+    ]
+
+    courses = [
+        {
+            'name': 'COMP 171',
+            'description': 'Intro to computer science learning python through simple IDE work',
+        },
+        {
+            'name': 'COMP 172',
+            'description': 'Intro to computer science 2, learning java and OOP'
+        }
+    ]
+
+    for user in users:
+        u = User(username=user['username'], first_name=user['first_name'], last_name=user['last_name'],
+                 email=user['email'], password_hash=user['password_hash'])
+        db.session.add(u)
+        print('Adding to User {}'.format(user))
+
+    for professor in professors:
+        p = Professor(first_name=professor['first_name'], last_name=professor['last_name'])
+        db.session.add(p)
+        print('Adding to Professor {}'.format(professor))
+
+    for course in courses:
+        c = Course(name=course['name'], description=course['description'])
+        db.session.add(c)
+        print('Adding to Course {}'.format(course))
+
+    for rating in ratings:
+        r = Rating(rating=rating['rating'], user_id=rating['user_id'], professor_id=rating['professor_id'])
+        db.session.add(r)
+        print('Adding to Rating {}'.format(course))
+
+    for comment in comments:
+        c = Comment(comment=comment['comment'], user_id=comment['user_id'], professor_id=comment['professor_id'])
+        db.session.add(c)
+        print('Adding to Comment {}'.format(course))
+
+    db.session.commit()
     return render_template('index.html', title='Home')
 
 

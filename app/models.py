@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     ratings = db.relationship('Rating', backref='user', lazy='dynamic')
-    courses = db.relationship('Course', backref='user', lazy='dynamic')
+    courses = db.relationship('UserToCourse', backref='user', lazy='dynamic')
 
     # ratings creates an SQLAlchemy Object that allows for queries to be made
     # backref='user' allows for us to type Rating.user.first_name, and access those values
