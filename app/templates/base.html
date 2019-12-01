@@ -1,14 +1,55 @@
+{% extends 'bootstrap/base.html' %}
 
 <html>
-
-    <head>
-       {% if title %}
-        <title>{{ title }} - Rate My Professor V2</title>
-        {% else %}
-        <title>Welcome to RMP V2</title>
+	<head>
+		{% if title %}
+			<title> {{ title }} - Cam, Joel, Iyayi</title>
+		{% else %}
+			  <title> RMP </title>
+		{% endif %}
+	</head>
+    {% block navbar %}
+        <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/index">Rate My Professor</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/about_us">About Us</a></li>
+                    {% if current_user.is_authenticated %}
+                        <!-- Present alternative NAV options for authenticated users -->
+                    {% endif %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_anonymous %}
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Register</a></li>
+                    {% else %}
+                    <li><a href="/logout">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+	<body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
         {% endif %}
-    </head>
-
-
+        {% endwith %}
+        {% block content %}
+        {% endblock %}
+	</body>
 </html>
-{% block content %}{% endblock %}
