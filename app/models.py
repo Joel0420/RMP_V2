@@ -90,7 +90,7 @@ class ProfessorToCourse(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
 
     def __repr__(self):
-        return '<ProfessorToCourse {}>'.format(self.name)
+        return '<ProfessorToCourse {}>'.format(self.id)
 
 
 class UserToCourse(db.Model):
@@ -99,4 +99,4 @@ class UserToCourse(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
 
     def __repr__(self):
-        return '<UserToCourse {}>'.format(self.name)
+        return '<UserToCourse {}>'.format(self.id)

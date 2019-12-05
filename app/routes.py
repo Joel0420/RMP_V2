@@ -52,51 +52,51 @@ def reset_db():
 
     ratings = [
         {
-            'rating': '2',
-            'user_id': '1',
-            'professor_id': '1'
+            'rating': 2,
+            'user_id': 1,
+            'professor_id': 1
 
         },
 
         {
-            'rating': '5',
-            'user_id': '1',
-            'professor_id': '2'
+            'rating': 5,
+            'user_id': 1,
+            'professor_id': 2
         },
 
         {
-            'rating': '7',
-            'user_id': '2',
-            'professor_id': '1'
+            'rating': 7,
+            'user_id': 2,
+            'professor_id': 1
         },
 
         {
-            'rating': '5',
-            'user_id': '2',
-            'professor_id': '2'
+            'rating': 5,
+            'user_id': 2,
+            'professor_id': 2
         }
     ]
 
     comments = [
         {
             'comment': 'Bro you are an amazing professor what',
-            'user_id':'1',
-            'professor_id':'1'
+            'user_id': 1,
+            'professor_id': 1
         },
         {
             'comment': 'Bro you are a weird professor',
-            'user_id': '1',
-            'professor_id': '2'
+            'user_id': 1,
+            'professor_id': 2
         },
         {
             'comment': 'I ate in the back of class all semester',
-            'user_id': '2',
-            'professor_id': '1'
+            'user_id': 2,
+            'professor_id': 1
         },
         {
             'comment': 'Weird class',
-            'user_id': '2',
-            'professor_id': '2'
+            'user_id': 2,
+            'professor_id': 2
         },
     ]
 
@@ -122,6 +122,21 @@ def reset_db():
         }
     ]
 
+    professor_to_course = [
+        {
+            'professor_id': 1,
+            'course_id': 1
+        },
+        {
+            'professor_id': 1,
+            'course_id': 2
+        },
+        {
+            'professor_id': 2,
+            'course_id': 1
+        }
+    ]
+
     for user in users:
         u = User(username=user['username'], first_name=user['first_name'], last_name=user['last_name'],
                  email=user['email'], password_hash=user['password_hash'])
@@ -141,12 +156,17 @@ def reset_db():
     for rating in ratings:
         r = Rating(rating=rating['rating'], user_id=rating['user_id'], professor_id=rating['professor_id'])
         db.session.add(r)
-        print('Adding to Rating {}'.format(course))
+        print('Adding to Rating {}'.format(rating))
 
     for comment in comments:
         c = Comment(comment=comment['comment'], user_id=comment['user_id'], professor_id=comment['professor_id'])
         db.session.add(c)
-        print('Adding to Comment {}'.format(course))
+        print('Adding to Comment {}'.format(comment))
+
+    for profToCourse in professor_to_course:
+        p2c = ProfessorToCourse(professor_id=profToCourse['professor_id'], course_id=profToCourse['course_id'])
+        db.session.add(p2c)
+        print('Adding to ProfessorToCourse {}'.format(professor_to_course))
 
     db.session.commit()
     return render_template('index.html', title='Home')
@@ -197,4 +217,7 @@ def search_results():
 @app.route('/professor/<name>')
 def professor(name):
     professor = Professor.query.filter_by(first_name=name).first()
-    return render_template('professor_info.html', title="Professor Page", professor=professor)
+    courses = Course.query.filter(Course.professors.any(professor_id=professor.id)).all()
+
+    return render_template('professor_info.html', title="Professor Page", professor=professor,
+                           courses=courses)
