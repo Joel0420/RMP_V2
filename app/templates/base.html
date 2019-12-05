@@ -26,6 +26,7 @@
                     {% if current_user.is_authenticated %}
                         <!-- Present alternative NAV options for authenticated users -->
                     {% endif %}
+                    <li><a href="/search">Search</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}

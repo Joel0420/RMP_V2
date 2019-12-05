@@ -5,7 +5,6 @@ from app.models import *
 from app.forms import *
 
 
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -187,3 +186,15 @@ def register():
         flash("Congratulations you are now a registered user!")
         return redirect('/login')
     return render_template('register.html', title='register', form=form)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search_results():
+    professors = Professor.query.all()
+    return render_template('search.html', title='search results', professors=professors)
+
+
+@app.route('/professor/<name>')
+def professor(name):
+    professor = Professor.query.filter_by(first_name=name).first()
+    return render_template('professor_info.html', title="Professor Page", professor=professor)
