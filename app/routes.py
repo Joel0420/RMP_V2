@@ -1,5 +1,5 @@
-from flask import render_template, flash, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask import render_template, flash, redirect, url_for, abort
+from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import *
 from app.forms import *
@@ -23,7 +23,6 @@ def about_us():
 
 @app.route('/reset_db')
 def reset_db():
-
     flash("Resetting database: deleting old data and repopulating with dummy data")
     # clear all data from all tables
     meta = db.metadata
@@ -204,8 +203,17 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash("Congratulations you are now a registered user!")
-        return redirect('/login')
+        return redirect(url_for('login'))
     return render_template('register.html', title='register', form=form)
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        abort(404)
+    return render_template('user.html', user=user)
 
 
 @app.route('/search', methods=['GET', 'POST'])
