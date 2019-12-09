@@ -65,13 +65,13 @@ def reset_db():
 
         {
             'rating': 7,
-            'user_id': 2,
+            'user_id': 3,
             'professor_id': 1
         },
 
         {
             'rating': 5,
-            'user_id': 2,
+            'user_id': 3,
             'professor_id': 2
         }
     ]
@@ -198,7 +198,8 @@ def register():
         return redirect('/index')
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, first_name=form.first_name.data,
+                    last_name=form.last_name.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -211,9 +212,12 @@ def register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first()
+    ratings = Rating.query.filter_by(user_id=user.id).all()
+
+    print("Ratings:", ratings)
     if user is None:
         abort(404)
-    return render_template('user.html', user=user)
+    return render_template('user.html', user=user, ratings=ratings)
 
 
 @app.route('/search', methods=['GET', 'POST'])

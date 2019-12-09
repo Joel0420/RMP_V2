@@ -4,11 +4,13 @@
     <body>
         <h1>User: {{ user.username }}</h1>
 
-        <h2>        Ratings You Have Given:</h2>
-
-{#        {% for ratings in ratings %}#}
-{#            #}
-{#        {% endfor %}#}
+        <h2>Ratings You Have Given:</h2>
+        {% for rating in ratings %}
+            <p>
+            <h3>Professor {{ rating.professor.first_name }} {{ rating.professor.last_name }}</h3>
+            Rating: {{ rating.rating }}
+            </p>
+        {% endfor %}
     </body>
 
 {% endblock %}
