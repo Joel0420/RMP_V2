@@ -3,6 +3,8 @@ from app import db
 from flask_login import UserMixin
 from app import login
 from werkzeug.security import generate_password_hash, check_password_hash
+import flask_whooshalchemy
+from whoosh.analysis import StemmingAnalyzer
 
 
 # Each User can have multiple comments/ratings, but each rating/comment can only have one User
@@ -39,6 +41,10 @@ def load_user(id):
 
 
 class Professor(db.Model):
+    __tablename__ = 'professor'
+    __searchable__ = ['first_name', 'last_name']  # these fields will be indexed by whoosh
+    __analyzer__ = StemmingAnalyzer()
+
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
