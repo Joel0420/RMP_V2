@@ -226,10 +226,17 @@ def search_results():
     return render_template('search.html', title='search results', professors=professors)
 
 
-@app.route('/professor/<name>')
+@app.route('/professor/<name>', methods=['GET', 'POST'])
 def professor(name):
     professor = Professor.query.filter_by(first_name=name).first()
     courses = Course.query.filter(Course.professors.any(professor_id=professor.id)).all()
+    form = RatingForm()
+    if form.validate_on_submit():
+        rating = Rating(rating=form.rating.data, user_id=current_user.id, professor_id=professor.id)
+        db.session.add(rating)
+        db.session.commit()
+        flash("Congratulations you've made a rating!")
+        return redirect('/index')
 
     return render_template('professor_info.html', title="Professor Page", professor=professor,
-                           courses=courses)
+                           courses=courses, form=form)

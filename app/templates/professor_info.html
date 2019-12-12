@@ -1,14 +1,29 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block content %}
     <h1>Professor Information</h1>
     <p> {{ professor.first_name }} {{ professor.last_name }} </p>
     <br><br>
     <h2> Courses </h2>
     {% for course in courses %}
-        <li>{{ course.name }}</li>
+        <li> {{ course.name }} </li>
         <ul>
-        <li> {{ course.description }}</li>
+        <li> {{ course.description }} </li>
         </ul>
     {% endfor %}
+
+    <form action = "" method = "post">
+        {{ form.hidden_tag() }}
+    <p>
+        {{ form.rating.label }}
+        {{ form.rating(size=2) }}
+        {% for error in form.rating.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.submit }}
+    </p>
+    </form>
 
 {% endblock %}
