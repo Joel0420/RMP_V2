@@ -12,6 +12,7 @@
         </ul>
     {% endfor %}
 
+    {% if current_user.is_authenticated %}
     <form action = "" method = "post">
         {{ form.hidden_tag() }}
     <p>
@@ -25,5 +26,6 @@
         {{ form.submit }}
     </p>
     </form>
+    {% endif %}
 
 {% endblock %}

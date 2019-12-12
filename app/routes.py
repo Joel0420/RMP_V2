@@ -3,6 +3,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import *
 from app.forms import *
+import flask_whooshalchemy
+from whoosh.analysis import StemmingAnalyzer
 
 
 @app.route('/')
