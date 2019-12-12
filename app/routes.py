@@ -3,6 +3,9 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import *
 from app.forms import *
+from sqlalchemy import or_
+from statistics import mean
+
 
 
 @app.route('/')
@@ -222,14 +225,26 @@ def user(username):
 
 @app.route('/search', methods=['GET', 'POST'])
 def search_results():
-    professors = Professor.query.all()
-    return render_template('search.html', title='search results', professors=professors)
+    form = SearchForm()
+    if form.validate_on_submit():
+        search = form.searchField.data
+        professors = set(Professor.query.filter(or_(Professor.first_name.like(search), Professor.last_name.like(search))).all())
+        courses = set(Course.query.filter(Course.name.like(search)).all())
+        for search_term in search.split():
+            search_term = '%' + search_term + '%'
+            professors = professors | set(Professor.query.filter(or_(Professor.first_name.like(search_term), Professor.last_name.like(search_term))).all())
+            courses = courses | set(Course.query.filter(Course.name.like(search_term)).all())
+            if not professors and not courses:
+                flash("No Professors or Courses Match Your Search")
+            else:
+                return render_template('search.html', title='search results', form=form, professors=professors, courses=courses)
+    return render_template('search.html', title='search results', form=form)
 
 
-@app.route('/professor/<name>')
-def professor(name):
-    professor = Professor.query.filter_by(first_name=name).first()
+@app.route('/professor/<pid>')
+def professor(pid):
+    professor = Professor.query.filter_by(id=pid).first()
     courses = Course.query.filter(Course.professors.any(professor_id=professor.id)).all()
-
-    return render_template('professor_info.html', title="Professor Page", professor=professor,
-                           courses=courses)
+    ratings = Rating.query.filter(Rating.professor_id == professor.id).all()
+    avg_rating = mean([rating.rating for rating in ratings])
+    return render_template('professor_info.html', title="Professor Page", professor=professor, courses=courses, ratings=ratings, avg_rating=avg_rating)

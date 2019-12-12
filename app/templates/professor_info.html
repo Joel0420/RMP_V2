@@ -4,11 +4,29 @@
     <p> {{ professor.first_name }} {{ professor.last_name }} </p>
     <br><br>
     <h2> Courses </h2>
-    {% for course in courses %}
-        <li>{{ course.name }}</li>
-        <ul>
-        <li> {{ course.description }}</li>
-        </ul>
+    <ul>
+        {% for course in courses %}
+            <li>
+                {{ course.name }}:
+                <br>
+                {{ course.description }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2> Ratings </h2>
+    <ul>
+        {% for rating in ratings %}
+            <li>{{ rating.rating }} / 10</li>
+        {% endfor %}
+    </ul>
+    {{ avg_rating }}
+    {% for star in range(avg_rating|int) %}
+        ★
     {% endfor %}
+    {% for star in range(10 - avg_rating|int) %}
+        ☆
+    {% endfor %}
+    <br>
 
 {% endblock %}

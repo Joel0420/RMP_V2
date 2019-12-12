@@ -1,9 +1,35 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+
 {% block content %}
     <h1>Search</h1>
-    <p>
-    {% for professor in professors %}
-        <li><a href="{{ url_for('professor', name=professor.first_name) }}">{{ professor.first_name }}</a></li>
-    {% endfor %}
-    </p>
+    <div class="row">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Professors</h2>
+            <ul>
+                {% for professor in professors %}
+                    <li><a href="{{ url_for('professor', pid=professor.id) }}">{{ professor.first_name }} {{ professor.last_name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-4">
+            <h2>Courses</h2>
+            <ul>
+                {% for course in courses %}
+                    <li>{{ course.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+
 {% endblock %}
