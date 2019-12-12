@@ -239,10 +239,18 @@ def search_results():
     return render_template('search.html', title='search results', form=form)
 
 
-@app.route('/professor/<pid>')
+@app.route('/professor/<pid>', methods=['GET', 'POST'])
 def professor(pid):
+    form = RatingForm()
     professor = Professor.query.filter_by(id=pid).first()
     courses = Course.query.filter(Course.professors.any(professor_id=professor.id)).all()
     ratings = Rating.query.filter(Rating.professor_id == professor.id).all()
     avg_rating = mean([rating.rating for rating in ratings])
-    return render_template('professor_info.html', title="Professor Page", professor=professor, courses=courses, ratings=ratings, avg_rating=avg_rating)
+
+    if form.validate_on_submit():
+        rating = Rating(rating=form.rating.data, user_id=current_user.id, professor_id=professor.id)
+        db.session.add(rating)
+        db.session.commit()
+        flash("Congratulations you've made a rating!")
+        return redirect('/index')
+    return render_template('professor_info.html', title="Professor Page", professor=professor, courses=courses, ratings=ratings, avg_rating=avg_rating, form=form)

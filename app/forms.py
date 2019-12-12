@@ -38,7 +38,7 @@ class EditProfileForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    searchField = StringField('Course or Professor', validators=[DataRequired()])
+    searchField = StringField('Course', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class RatingForm(FlaskForm):
