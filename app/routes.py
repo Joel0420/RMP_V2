@@ -3,15 +3,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.models import *
 from app.forms import *
-<<<<<<< HEAD
 from sqlalchemy import or_
 from statistics import mean
-
-=======
-import flask_whooshalchemy
-from whoosh.analysis import StemmingAnalyzer
->>>>>>> e0fe420d2a91104135f4400af7546e8540c57152
-
 
 @app.route('/')
 @app.route('/index')
