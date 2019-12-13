@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from app.models import *
 
@@ -41,6 +41,9 @@ class SearchForm(FlaskForm):
     searchField = StringField('Course', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+
 class RatingForm(FlaskForm):
-    rating = IntegerField('Rating', validators=[DataRequired()])
+    rating = SelectField('Rating', choices=[(1, 1), (2, 2), (3, 3), (4, 4),
+                                            (5, 5), (6, 6), (7, 7), (8, 8),
+                                            (9, 9), (10, 10)], coerce=int, validators=[DataRequired()])
     submit = SubmitField('Submit')

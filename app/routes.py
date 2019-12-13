@@ -6,6 +6,7 @@ from app.forms import *
 from sqlalchemy import or_
 from statistics import mean
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -66,13 +67,13 @@ def reset_db():
 
         {
             'rating': 7,
-            'user_id': 3,
+            'user_id': 2,
             'professor_id': 1
         },
 
         {
             'rating': 5,
-            'user_id': 3,
+            'user_id': 2,
             'professor_id': 2
         }
     ]
@@ -252,7 +253,7 @@ def professor(pid):
         db.session.add(rating)
         db.session.commit()
         flash("Congratulations you've made a rating!")
-        return redirect('/index')
+        return redirect('#')
     return render_template('professor_info.html', title="Professor Page", professor=professor, courses=courses, ratings=ratings, avg_rating=avg_rating, form=form)
 
 
