@@ -254,3 +254,11 @@ def professor(pid):
         flash("Congratulations you've made a rating!")
         return redirect('/index')
     return render_template('professor_info.html', title="Professor Page", professor=professor, courses=courses, ratings=ratings, avg_rating=avg_rating, form=form)
+
+
+@app.route('/course/<name>', methods=['GET', 'POST'])
+def course(name):
+    course = Course.query.filter_by(name=name).first()
+    professors = Professor.query.filter(Professor.courses.any(course_id=course.id)).all()
+    print("Professors: ", professors)
+    return render_template('course_info.html', title="Course", course=course, professors=professors)
